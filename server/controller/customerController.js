@@ -34,7 +34,7 @@ module.exports ={
 
     async create(req, res){
         try {
-            await check('customer_name','name is required!').notEmpty().run(req)
+            await check('name','name is required!').notEmpty().run(req)
             const result = validationResult(req)
             if (!result.isEmpty()) {
                 return res.status(400).json({ errors: result.array() })
@@ -51,7 +51,7 @@ module.exports ={
     },
 
     async update(req, res) {
-        await check('customer_name','name is required!').notEmpty().run(req)
+        await check('name','name is required!').notEmpty().run(req)
 		const result = validationResult(req)
 		if (!result.isEmpty()) {
 			return res.status(400).json({ errors: result.array() })

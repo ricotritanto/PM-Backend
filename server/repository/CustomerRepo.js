@@ -41,7 +41,7 @@ module.exports = {
 
     async create(req){
 		return await Models.customers.create({
-			name:req.body.customer_name,
+			name:req.body.name,
 			alias:req.body.alias,
 			address:req.body.address,
 			phone:req.body.phone
@@ -50,7 +50,7 @@ module.exports = {
 
     async update(req){
 		return await Models.customers.update({
-			name:req.body.customer_name,
+			name:req.body.name,
 			alias:req.body.alias,
 			address:req.body.address,
 			phone:req.body.phone},{

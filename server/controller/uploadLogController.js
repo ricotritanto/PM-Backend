@@ -30,13 +30,7 @@ module.exports ={
                 let dataCustomers = []
                 let dataInvoice = []
                 let dataMaster = []
-                // di ifelse data yang akan diupload ke DB berdasarkan filetype nya
-                // console.log(req.body.filetype)
-                // return;
                 let idUpload = uploaddata.id
-                // var statusnya = 'uploaded'
-                // var statusFail= 'failed'
-                
                 var statusnya ='';
                 async function uploadData(){
                     try {                        
