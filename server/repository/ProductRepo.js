@@ -3,11 +3,38 @@ const getAllProducts = require('../controller/productController')
 const Models = require('../models/index')
 const sequelize = require('sequelize');
 
+const getPagination = (page, size) => {
+	const limit = size ? +size : 5;
+	const offset = page ? page * limit : 0;
+	return { limit, offset };
+  };
+  
+  const getPagingData = (data, page, limit) => {
+	const { count: totalItems, rows: products } = data;
+	const currentPage = page ? +page : 0;
+	const totalPages = Math.ceil(totalItems / limit);
+  
+	return { totalItems, products, totalPages, currentPage };
+};
 module.exports = {
-    async getAll(req){
-        return await Models.products.findAll()
-    },
+	async getAll (req, res){
+		const { page, size, name } = req.query;
+		var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+		const { limit, offset } = getPagination(page, size);
 
+		await Models.products.findAndCountAll({ where: condition, limit, offset })
+		.then(data => {
+			const response = getPagingData(data, page, limit);
+			console.log(data.length)
+			res.send(response);
+		})
+		.catch(err => {
+			res.status(500).send({
+				message:
+				err.message || "Some error occurred while retrieving tutorials."
+			});
+		});
+	},
 	async getById(req){
 		return await Models.products.findOne({
 			where:{

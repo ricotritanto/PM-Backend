@@ -1,14 +1,13 @@
-const productRepo = require('../repository/CustomerRepo')
+const productRepo = require('../repository/ProductRepo')
 const {check, validationResult} = require('express-validator')
 const readXlsxFile = require('read-excel-file/node')
-const productModels = require('../models/index')
 
 module.exports ={
     async getAllProducts(req,res){   
         try {
             const products = await productRepo.getAll(req,res)
             res.status(200).send(products)
-        } catch (error) {
+        } catch (e) {
             console.log(e)
             res.status(500).send(e)
         }

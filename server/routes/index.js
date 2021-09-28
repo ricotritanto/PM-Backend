@@ -1,9 +1,8 @@
-// const productController = require('../controller/productController')
+const productController = require('../controller/productController')
 const CustomerController = require('../controller/CustomerController')
 const uploadLogController = require('../controller/UploadLogController')
 const multer = require('multer')
 const upload = require('../middlewares/upload')
-// const CustomerController = require('../controller/')
 
 module.exports = app =>{
 	app.get('/api', (req, res) => {
@@ -42,9 +41,9 @@ module.exports = app =>{
 	// app.delete('/api/category/:id', categoryController.delete)
 
 	// route untuk products
-	// app.get('/api/products', productController.getAll)
-	// app.post('/api/products', productController.create)
-	// app.put('/api/products/:id', productController.update)
-	// app.delete('/api/products/:id', productController.delete)
+	app.get('/api/products', productController.getAllProducts)
+	app.post('/api/product', productController.create)
+	app.put('/api/products/:id', productController.update)
+	app.delete('/api/product/:id', productController.delete)
 	// app.get('/api/products/:barcode',productController.getByBarcode)
 }
