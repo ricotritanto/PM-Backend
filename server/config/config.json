@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": null,
-    "database": "putramanunggal_development",
-    "host": "127.0.0.1",
+    "password": "passroot",
+    "database": "putra-manunggal",
+    "host": "mariadb-putra-manunggal",
     "dialect": "mysql"
   },
   "test": {
