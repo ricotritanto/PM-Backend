@@ -1,2 +1,3 @@
 /node_modules
 /resources/assets/upload/*
+!/resources/assets/upload/.gitkeep 
