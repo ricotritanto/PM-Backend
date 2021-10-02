@@ -1,4 +1,4 @@
-const productRepo = require('../repository/ProductRepo')
+const productRepo = require('../repository/productRepo')
 const {check, validationResult} = require('express-validator')
 const readXlsxFile = require('read-excel-file/node')
 

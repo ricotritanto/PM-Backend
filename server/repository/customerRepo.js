@@ -1,5 +1,5 @@
 var fs = require('fs')
-const getAllCustomers = require('../controller/CustomerController')
+const getAllCustomers = require('../controller/customerController')
 const Models = require('../models/index')
 const sequelize = require('sequelize');
 

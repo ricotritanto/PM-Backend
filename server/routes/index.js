@@ -1,6 +1,6 @@
 const productController = require('../controller/productController')
-const CustomerController = require('../controller/CustomerController')
-const uploadLogController = require('../controller/UploadLogController')
+const CustomerController = require('../controller/customerController')
+const uploadLogController = require('../controller/uploadLogController')
 const multer = require('multer')
 const upload = require('../middlewares/upload')
 

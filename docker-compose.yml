@@ -1,0 +1,39 @@
+version: '3.0'
+services:
+    putra-manunggal-be:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        working_dir: /home/pm/be/src
+        container_name: putra-manunggal-be
+        depends_on:
+            - mariadb-putra-manunggal
+        volumes:
+            - .:/home/pm/be/src
+        ports:
+            - 3001:3001
+        networks:
+            - putra-manunggal-network
+        tty: true
+    mariadb-putra-manunggal:
+        container_name: mariadb-putra-manunggal
+        restart: always
+        image: mariadb:10.5
+        environment:
+            MARIADB_DATABASE: 'putra-manunggal'
+            MARIADB_ROOT_PASSWORD: 'passroot'
+            MARIADB_USER: 'user_name'
+            MARIADB_PASS: 'user_pass'
+            TZ: 'Asia/Jakarta'
+        volumes:
+            - putra-manunggal-db-vol:/var/lib/mysql
+        ports:
+            - "3310:3306"
+        networks:
+            - putra-manunggal-network
+volumes:
+    putra-manunggal-db-vol:
+        driver: local
+networks:
+    putra-manunggal-network:
+        driver: bridge
