@@ -1,33 +1,33 @@
 'use strict'
-const productServices = require('../services/productServices')
+const customerServices = require('../services/customerServices')
 
 const getAll = async(req, res, next) =>{
-	return productServices.getAll(req.query)
+	return customerServices.getAll(req.query)
 		.then(result => res.status(result.status).send(result))
 		.catch(err => next(err))
 }
 
-const deleteProduct = async(req, res,next)=>{
-	return productServices.deleteProduct(req.params.id)
+const deleteCustomer = async(req, res,next)=>{
+	return customerServices.deleteData(req.params.id)
 		.then(result => res.status(result.status).send(result))
 		.catch(err => next(err))
 }
 
-const updateProduct = async(req,res,next) =>{
-	return productServices.update(req)
+const updateCustomer = async(req,res,next) =>{
+	return customerServices.update(req)
 		.then(result => res.status(result.status).send(result))
 		.catch(err => next(err))
 }
 
-const createProduct = async(req,res, next) =>{
-	return productServices.create(req)
+const createCustomer = async(req,res, next) =>{
+	return customerServices.create(req)
 		.then(result => res.status(result.status).send(result))
 		.catch(err => next(err))
 }
 
 module.exports = {
 	getAll,
-	deleteProduct,
-	updateProduct,
-	createProduct
+	deleteCustomer,
+	updateCustomer,
+	createCustomer
 }

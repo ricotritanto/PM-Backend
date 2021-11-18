@@ -1,9 +1,8 @@
 'use strict'
 require('dotenv').config()
-const productRepo = require('../repository/productsRepo')
+const customerRepo = require('../repository/customerRepo')
 const sequelize = require('sequelize')
 const { check, validationResult } = require('express-validator')
-
 
 const create = async(req)=>{
 	await check('name', 'name is required').notEmpty().run(req)
@@ -11,19 +10,20 @@ const create = async(req)=>{
 	if (!result.isEmpty()) {
 		return {
 			status:422,
-			message:'product name is required'
+			message:'customer name is required'
 		}
 	}
-	const checkIsExistCode = await productRepo.findOne(req)
+
+	const checkIsExistCode = await customerRepo.findOne(req)
 	if(checkIsExistCode)
 		return {
 			status:400,
 			message: req.body.name+' is already'
 		}
 	try {
-		await productRepo.createProducts(req)
+		await customerRepo.createCustomer(req)
 		return {
-			status: 201,
+			status:201,
 			message: 'success created data'
 		}
 	} catch (error) {
@@ -32,7 +32,6 @@ const create = async(req)=>{
 			message: 'something went wrong'
 		}
 	}
-	
 }
 
 const update = async(req)=>{
@@ -41,27 +40,26 @@ const update = async(req)=>{
 	if (!result.isEmpty()) {
 		return {
 			status:422,
-			message:'product name is required'
+			message:'customer name is required'
 		}
 	}
-	const productName = await productRepo.find(req)
-	if(!productName) return{
+	const customerName = await customerRepo.find(req)
+	if(!customerName) return{
 		status:400,
-		message: 'product name not found'
+		message: 'customer name not found'
 	}
-	if(req.body.name != undefined && req.body.name != productName.name){
-		const existingRecord = await productRepo.findData(1, 10, {}, [{name: req.body.name}])
-		// console.log(existingRecord.count)
+	if(req.body.name != undefined && req.body.name != customerName.name){
+		const existingRecord = await customerRepo.findData(1, 10, {}, [{name: req.body.name}])
 		if (existingRecord.count) {
 			return {
 				status: 400,
-				message: 'Product name already exist!'
+				message: 'customer name already exist!'
 			}
 		}
 	}
 	try {
 		req.body.updated_at = sequelize.fn('NOW')
-		await productRepo.updateById(req)
+		await customerRepo.updateById(req)
 		return {
 			status:201,
 			message: 'success updating data'
@@ -75,12 +73,12 @@ const update = async(req)=>{
 }
 
 const getAll = async(data) =>{
-	const products = await productRepo.getAllProducts(data,data.per_page,data.page)
+	const customers = await customerRepo.getAllCustomers(data,data.per_page,data.page)
 	const result = {
-		count: products.count,
+		count: customers.count,
 		page:parseFloat(data.page),
 		per_page: parseFloat(data.per_page),
-		items: products.rows
+		items: customers.rows
 	}
 	return {
 		status: 200,
@@ -88,9 +86,9 @@ const getAll = async(data) =>{
 	}
 }
 
-const deleteProduct = async(req)=>{
+const deleteData = async(req) =>{
 	try {
-		await productRepo.deleteProducts(req)
+		await customerRepo.deleteCustomers(req)
 		return {
 			status:201,
 			message: 'success updating data'
@@ -107,5 +105,5 @@ module.exports = {
 	create,
 	update,
 	getAll,
-	deleteProduct,
+	deleteData
 }

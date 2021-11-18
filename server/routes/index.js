@@ -1,6 +1,7 @@
 'use strict'
 const uploadFile = require('../controller/uploadFile')
 const productController = require('../controller/products')
+const customerController = require('../controller/customers')
 const fileUploader = require('../util/fileUploader')
 
 module.exports = app =>{
@@ -19,5 +20,13 @@ module.exports = app =>{
 	app.delete('/api/products/:id', productController.deleteProduct)
 	app.put('/api/products/:id', productController.updateProduct)
 	app.post('/api/products/', productController.createProduct)
+
+
+
+	// api customers
+	app.get('/api/customers', customerController.getAll)
+	app.delete('/api/customers/:id', customerController.deleteCustomer)
+	app.put('/api/customers/:id', customerController.updateCustomer)
+	app.post('/api/customers/', customerController.createCustomer)
 	
 }
