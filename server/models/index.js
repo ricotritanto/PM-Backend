@@ -30,7 +30,14 @@ Object.keys(db).forEach(modelName => {
 		db[modelName].associate(db)
 	}
 })
-
 db.sequelize = sequelize
 db.Sequelize = Sequelize
+
+var initModels = require('./init-models')
+var models = initModels(sequelize)
+
+
+
 module.exports = db
+module.exports = models
+

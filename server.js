@@ -24,6 +24,11 @@ Routes(app)
 // 	console.log('Drop and re-sync db.')
 // })
 
+// const db = require('./server/models')
+// const Role = db.role;
+
+// db.sequelize.sync()
+
 const server = require('http').createServer(app) 
 const PORT = process.env.PORT || process.env.APP_PORT || 4000
 if (!module.parent) {

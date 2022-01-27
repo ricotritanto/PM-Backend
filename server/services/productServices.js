@@ -47,7 +47,7 @@ const update = async(req)=>{
 	const productName = await productRepo.find(req)
 	if(!productName) return{
 		status:400,
-		message: 'product name not found'
+		message: 'product not found'
 	}
 	if(req.body.name != undefined && req.body.name != productName.name){
 		const existingRecord = await productRepo.findData(1, 10, {}, [{name: req.body.name}])

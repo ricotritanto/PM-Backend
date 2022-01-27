@@ -1,43 +1,24 @@
 const Sequelize = require('sequelize')
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('invoice', {
+	return sequelize.define('roles', {
 		id: {
 			autoIncrement: true,
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true
 		},
-		customer_id: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'customers',
-				key: 'id'
-			}
-		},
-		dispentation: {
-			type: DataTypes.BIGINT,
-			allowNull: false,
-			defaultValue: 0
-		},
-		amount: {
-			type: DataTypes.BIGINT,
-			allowNull: false,
-			defaultValue: 0
-		},
-		invoice_date: {
-			type: DataTypes.DATE,
-			allowNull: false,
-			defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+		role: {
+			type: DataTypes.STRING,
+			allowNull: false
 		},
 		created_at: {
 			type: DataTypes.DATE,
-			allowNull: false,
+			allowNull: true,
 			defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
 		},
 		updated_at: {
 			type: DataTypes.DATE,
-			allowNull: false,
+			allowNull: true,
 			defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
 		},
 		deleted_at: {
@@ -46,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	}, {
 		sequelize,
-		tableName: 'invoice',
+		tableName: 'roles',
 		timestamps: false,
 		indexes: [
 			{
@@ -55,13 +36,6 @@ module.exports = function(sequelize, DataTypes) {
 				using: 'BTREE',
 				fields: [
 					{ name: 'id' },
-				]
-			},
-			{
-				name: 'invoice_FK',
-				using: 'BTREE',
-				fields: [
-					{ name: 'customer_id' },
 				]
 			},
 		]
