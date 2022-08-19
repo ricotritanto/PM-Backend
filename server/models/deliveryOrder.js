@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('delivery_orders', {
+	return sequelize.define('deliveryOrder', {
 		id: {
 			autoIncrement: true,
 			type: DataTypes.INTEGER,
@@ -59,7 +59,7 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	}, {
 		sequelize,
-		tableName: 'delivery_orders',
+		tableName: 'deliveryOrder',
 		timestamps: false,
 		indexes: [
 			{
@@ -71,19 +71,19 @@ module.exports = function(sequelize, DataTypes) {
 				]
 			},
 			{
-				name: 'delivery_orders_FK',
+				name: 'deliveryOrder_ibfk_1',
 				using: 'BTREE',
 				fields: [
 					{ name: 'customer_id' },
 				]
 			},
 			{
-				name: 'delivery_orders_FK_1',
+				name: 'deliveryOrder_ibfk_2',
 				using: 'BTREE',
 				fields: [
 					{ name: 'product_id' },
 				]
-			},
+			}
 		]
 	})
 }

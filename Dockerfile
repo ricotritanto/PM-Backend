@@ -6,7 +6,7 @@ RUN apk update && \
     apk add gcc && \
     apk add musl-dev && \
     apk add curl && \
-    apk add python && \
+    apk add python3 && \
     apk add make && \
     apk add g++
     

@@ -1,10 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 'use strict'
-const models = require('../models')
+const {models} = require('../models')
 const {Op } = require('sequelize')
 
 const insertBulk = async (data) => {
-	return await models.customers.bulkCreate(data)
+	return	await models.customers.bulkCreate(data)
+		
 }
 
 const getAllCustomers = async(data,limit =10, offset = 0)=>{
@@ -92,6 +93,18 @@ const findOne = async(req) =>{
 	})
 }
 
+const findCustomer = async(data) =>{
+	return await models.customers.findOne({
+		where: {
+			name : data.customers.toLowerCase()
+		},
+		attributes:['id'],
+		raw:true,
+		plain:true
+	})
+}
+
+
 module.exports = {
 	insertBulk,
 	getAllCustomers,
@@ -100,5 +113,6 @@ module.exports = {
 	createCustomer,
 	findOne,
 	findData,
-	find
+	find,
+	findCustomer
 }

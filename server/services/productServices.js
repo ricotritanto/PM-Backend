@@ -82,6 +82,7 @@ const getAll = async(data) =>{
 		per_page: parseFloat(data.per_page),
 		items: products.rows
 	}
+	console.log(result)
 	return {
 		status: 200,
 		result

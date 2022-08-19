@@ -38,6 +38,7 @@ var models = initModels(sequelize)
 
 
 
-module.exports = db
-module.exports = models
+// module.exports = db
+// module.exports = models
+module.exports = {models, db}
 

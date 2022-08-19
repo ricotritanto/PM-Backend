@@ -12,12 +12,13 @@ const signup = async(req,res) => {
 	await check('username', 'username is required').notEmpty().run(req)
 	await check('email', 'email is required').notEmpty().run(req)
 	await check('password', 'password is required').notEmpty().run(req)
+	await check('roles', 'role is required').notEmpty().run(req)
 
 	const result = validationResult(req)
 	if (!result.isEmpty()) {
 		return {
 			status:422,
-			message:'data is required'
+			message: result.errors.map(msg=>msg.msg)
 		}
 	}
 
@@ -38,17 +39,11 @@ const signup = async(req,res) => {
 		}
 	}
 	try{
-		const result = await authRepo.signup(req,res)
-		const idUser = JSON.stringify(result.id)
-		// console.log(idUser)
-		if(result){
-			await authRepo.signupRole(req,idUser)
-			return {
-				status: 201,
-				result:{
-					message: 'successfully',
-					// data:result
-				}
+		await authRepo.signup(req,res)
+		return {
+			status: 201,
+			result:{
+				message: 'successfully',
 			}
 		}
 		
@@ -90,11 +85,8 @@ const signin = async(req)=>{
 		expiresIn: 86400 //24 jam
 	})
 
-	// var authorities = []
 	try{
 		const getRoles = await authRepo.getRole(user)
-		// console.log(
-		// console.log(JSON.stringify(getRoles))
 		return {
 			status:200,
 			id:user.id,
@@ -106,7 +98,6 @@ const signin = async(req)=>{
 	}catch(err) {
 		return {
 			status: 500,
-			// message: 'something went wrong'
 			message:err.message
 		}
 	}
@@ -199,13 +190,10 @@ const update = async(req)=>{
 	
 	try{
 		req.body.updated_at = sequelize.fn('NOW')
-		const result = await authRepo.updateById(req)
-		if(result){
-			await authRepo.updateRole(req)
-			return {
-				status: 201,
-				message: 'successfully',
-			}
+		await authRepo.updateById(req)
+		return {
+			status: 201,
+			message: 'successfully',
 		}
 		
 	}catch(error) {

@@ -7,7 +7,7 @@ const excelFilter = (req, file, cb) => {
 		cb('no file type defined.', true)
 		return
 	}
-	const fileTypes = ['products','customers','masters']
+	const fileTypes = ['products','customers','delivery_orders','invoice']
 	if(!fileTypes.includes(req.body.file_type)){
 		cb('invalid file_type value.', true)
 		return

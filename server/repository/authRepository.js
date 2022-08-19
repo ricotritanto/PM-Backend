@@ -1,24 +1,29 @@
 'use strict'
-const models = require('../models')
-const {Op } = require('sequelize')
-// const sequelize = require('sequelize')
+const {models, db} = require('../models')
+const {Op} = require('sequelize')
+// const db = abc
 
 var bcrypt = require('bcryptjs')
 
 const signup = async(req) =>{
-	return await models.user.create({
-		username: req.body.username,
-		email: req.body.email,
-		password: bcrypt.hashSync(req.body.password, 8)
-	})
-}
+	try {
+		const user = await db.sequelize.transaction(async (t) =>{
+			const result = await models.user.create({
+				username: req.body.username,
+				email: req.body.email,
+				password: bcrypt.hashSync(req.body.password, 8)
+			},{transaction: t})
+			const idUser = JSON.stringify(result.id)
 
-const signupRole = async(req,idUser)=>{
-	console.log(req.body)
-	return await models.user_roles.create({
-		roleId:req.body.roles,
-		id_user:idUser
-	})
+			await models.user_roles.create({
+				roleId:req.body.roles,
+				id_user:idUser
+			}, {transaction: t})            
+		})
+		return user
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 const signin = async (req) =>{
@@ -105,26 +110,30 @@ const getUserById = async(req) =>{
 }
 
 const updateById = async(req)=>{
-	return await models.user.update({
-		username:req.body.username.toLowerCase(),
-		email:req.body.email,
-		role:req.body.roles,
-		// password:bcrypt.hashSync(req.body.password, 8),
-		updated_at:req.body.updated_at
+	try {
+		const user = await db.sequelize.transaction(async (t) =>{
+			await models.user.update({
+				username:req.body.username.toLowerCase(),
+				email:req.body.email,
+				role:req.body.roles,
+				// password:bcrypt.hashSync(req.body.password, 8),
+				updated_at:req.body.updated_at
+			},{
+				where:{id:req.params.id}
+			}, {transaction: t})
+			await models.user_roles.update({
+				roleId:req.body.roles,
+				id_user:req.params.id,
+				updated_at:req.body.updated_at
+			},{
+				where:{id_user:req.params.id}
+			}, {transaction: t})
+		})
+		return user
+	} catch (error) {
+		console.log(error)
+		return error
 	}
-	,{
-		where:{id:req.params.id}
-	})
-}
-
-const updateRole = async(req)=>{
-	return await models.user_roles.update({
-		roleId:req.body.roles,
-		id_user:req.params.id,
-		updated_at:req.body.updated_at
-	},{
-		where:{id_user:req.params.id}
-	})
 }
 
 const find = async(req)=>{
@@ -165,13 +174,19 @@ const findData = async(page, perpage,search = {},specificWhere = []) =>{
 }
 
 const deleteUser = async(req)=>{
-	return await models.user.destroy({
-		where:{id:req.params.id}
-	})
-		.then(await models.user_roles.destroy({
-			where:{id_user:req.params.id}
-		}))
-		// .catch(err => next(err))
+	try {
+		const user = await db.sequelize.transaction(async (t) =>{
+			await models.user_roles.destroy({
+				where:{id_user:req.params.id}
+			},{transaction: t})
+			await models.user.destroy({
+				where:{id:req.params.id}
+			},{transaction: t})
+		})
+		return user
+	} catch (error) {
+		return error
+	}
 }
 
 const updatePassword = async(req)=>{
@@ -193,10 +208,8 @@ module.exports= {
 	getAllRole,
 	checkUser,
 	checkEmail,
-	signupRole,
 	getUserById,
 	updateById,
-	updateRole,
 	find,
 	findData,
 	deleteUser,

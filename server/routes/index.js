@@ -6,6 +6,8 @@ const fileUploader = require('../util/fileUploader')
 const {authJwt } = require('../middlewares/index')
 const authController = require('../controller/auth')
 const userController = require('../controller/user')
+const doController = require('../controller/do')
+const invoiceController = require('../controller/invoice')
 
 module.exports = app =>{
 	app.get('/api/health', (req, res) => {
@@ -58,6 +60,23 @@ module.exports = app =>{
 	app.put('/api/users/:id', authController.updateUser)
 	app.delete('/api/users/:id', authController.deleteUser)
 	app.put('/api/users/changepassword/:id', authController.changePassword)
+
+	// api delivery delivery_orders
+	app.post('/api/delivery_orders', doController.createDO)
+	app.get('/api/delivery_orders', doController.getAll)
+	app.delete('/api/delivery_orders/:id', doController.deleteDO)
+	app.put('/api/delivery_orders/:id', doController.updateDO)
+
+
+	// api delivery invoice
+	app.post('/api/invoice', invoiceController.createInvoice)
+	app.get('/api/invoice', invoiceController.getAll)
+	app.delete('/api/invoice/:id', invoiceController.deleteInvoice)
+	app.put('/api/invoice/:id', invoiceController.updateInvoice)
+
+
+
+
 	// test user controller
 	app.get('/api/test/all', userController.allAccess)
 

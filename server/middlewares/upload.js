@@ -1,17 +1,3 @@
-// var fs = require('fs')
-// var uploadFile = function(req) {
-// 	console.log(req.file)
-// 	return new Promise((resolve) => {
-// 		var outStream = fs.createWriteStream(('./resources/assets/upload/')+req.file.originalname)
-// 		outStream.write(req.file.buffer)
-// 		outStream.end()
-// 		outStream.on('finish', function () {
-// 			resolve('uploaded')
-// 		})
-// 	})
-// }
-
-// module.exports = uploadFile
 const multer = require('multer')
 
 const excelFilter = (req, file, cb) => {

@@ -1,5 +1,5 @@
 'use strict'
-const models = require('../models')
+const {models} = require('../models')
 
 const insert = async (data) => {
 	return await models.upload_log.create({

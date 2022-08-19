@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: 'UPLOADED'
 		},
 		filetype: {
-			type: DataTypes.ENUM('customers','products','invoice','delivery_orders'),
+			type: DataTypes.ENUM('customers','products','invoice','deliveryOrder'),
 			allowNull: false
 		},
 		created_at: {

@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 'use strict'
-const models = require('../models')
+const {models}= require('../models')
 const {Op } = require('sequelize')
 
 const insertBulk = async (data) => {
@@ -86,6 +86,18 @@ const findOne = async(req) =>{
 	})
 }
 
+
+const findProduct = async(data) =>{
+	return await models.products.findOne({
+		where: {
+			name : data.products.toLowerCase()
+		},
+		attributes:['id'],
+		raw:true,
+		// plain:true
+	})
+}
+
 module.exports = {
 	insertBulk,
 	getAllProducts,
@@ -94,5 +106,6 @@ module.exports = {
 	createProducts,
 	findOne,
 	find,
-	findData
+	findData,
+	findProduct
 }

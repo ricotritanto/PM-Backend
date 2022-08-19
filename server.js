@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const Routes = require('./server/routes')
 const path = require('path')
 
+
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname,'resources')))
 process.env.FULL_FILEPATH = __dirname + '/'+process.env.FILEPATH
 
 Routes(app)
+
 
 // const db = require('./server/models')
 // db.sequelize.sync({ force: true }).then(() => {
@@ -30,7 +32,7 @@ Routes(app)
 // db.sequelize.sync()
 
 const server = require('http').createServer(app) 
-const PORT = process.env.PORT || process.env.APP_PORT || 4000
+const PORT = process.env.PORT || process.env.APP_PORT || 3001
 if (!module.parent) {
 	server.listen(PORT, () => {
 		console.log('Express Server Now Running. port:'+PORT)

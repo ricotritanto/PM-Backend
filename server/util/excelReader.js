@@ -5,7 +5,6 @@ const readExcelFileSingleSheet = async (path,sheetName) => {
 		const workbook = new ExcelJS.Workbook()
 		const wb = await workbook.xlsx.readFile(path)
 		const ws = wb.getWorksheet(sheetName)
-
 		let totalRow = 0
 		let maxColumn = 0
 		let returnValue = []
