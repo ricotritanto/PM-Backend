@@ -21,7 +21,7 @@ const uploadData = async (fileName, fileType) => {
 	case 'customers':
 		await uploadCustomer(fileName, fileType, logData.id)
 		break
-	case 'delivery_orders':
+	case 'deliveryOrder':
 		await uploadDO(fileName, fileType, logData.id)
 		break
 	case 'invoice':
@@ -39,7 +39,7 @@ const uploadProduct = async (fileName, fileType, id) => {
 		let isHeader = false
 		let bulkValue = []
 		result.returnValue.forEach(element => {
-			console.log(JSON.stringify(element))
+			// console.log(JSON.stringify(element))
 			if(isHeader == true){
 				if(element.length != 2){
 					uploadFileRepo.update('FAILED', id)
@@ -127,6 +127,9 @@ const uploadDO = async(fileName, fileType, id) =>
 		let deliveryOrder = []
 		let customerId = []
 		let productId=[]
+		let deliveryOrderItem = []
+		let cekData = []
+
 		for(var i=0; i< bulkValue.length;i++) {
 			customerId[i]= await customerRepo.findCustomer(tampungBulk[i])
 			productId[i] = await productRepo.findProduct(tampungBulk[i])
@@ -137,18 +140,44 @@ const uploadDO = async(fileName, fileType, id) =>
 			else{
 				deliveryOrder.push({
 					customer_id:customerId[i].id,
-					product_id:productId[i].id,
-					buying_price: tampungBulk[i].buying_price,
-					selling_price: tampungBulk[i].selling_price,
-					qty: tampungBulk[i].qty,
-					delivery_order_date: tampungBulk[i].delivery_order_date
+					delivery_order_date: tampungBulk[i].delivery_order_date,
+					product_id:productId[i].id
 				})
 			}
-		
-			
 		}
-		// console.log(deliveryOrder)	
-		await deliveryOrderRepo.insertBulk(deliveryOrder)
+		var dataDO = deliveryOrder,
+			unique = dataDO.filter((set => f => !set.has(f.customer_id) && set.add(f.customer_id))(new Set))
+
+		// console.log(unique)
+		// console.log(unique.length)
+		let idDO = []
+		for(var x=0; x< dataDO.length;x++) {
+			cekData[x]= await deliveryOrderRepo.findByOne(dataDO[x])
+			console.log(cekData)
+			if(cekData[x]==null){
+				await deliveryOrderRepo.insertBulkDO(dataDO)
+				deliveryOrderItem.push({
+					deliveryOrder_id:cekData[x].id,
+					product_id:productId[x].id,
+					buying_price: tampungBulk[x].buying_price,
+					selling_price: tampungBulk[x].selling_price,
+					qty: tampungBulk[x].qty
+				})
+			}			
+			else{
+				idDO[x] = await deliveryOrderRepo.findProduct(cekData[x], dataDO[x])
+				if(idDO[x]==null){
+					deliveryOrderItem.push({
+						deliveryOrder_id:cekData[x].id,
+						product_id:productId[x].id,
+						buying_price: tampungBulk[x].buying_price,
+						selling_price: tampungBulk[x].selling_price,
+						qty: tampungBulk[x].qty
+					})
+				}
+			}
+		}
+		await deliveryOrderRepo.insertBulk(deliveryOrderItem)
 		await uploadFileRepo.update('PROCESSED', id)
 		
 	} catch (error) {
@@ -202,11 +231,19 @@ const uploadInvoice = async(fileName, fileType, id) =>
 					invoice_date: tampungBulk[i].invoice_date
 				})
 			}
-		
-			
 		}
-		await invoiceRepo.insertBulk(invoice)
-		await uploadFileRepo.update('PROCESSED', id)
+		const dataInvoice = []
+		for(var k=0; k< invoice.length;k++) {
+			dataInvoice[k] = await invoiceRepo.findID(invoice[k])
+			if(dataInvoice[k] == null){			
+				await invoiceRepo.insertBulk([invoice[k]])
+				await uploadFileRepo.update('PROCESSED', id)
+				return
+			}
+			else{
+				await uploadFileRepo.update('FAILED', id)
+			}
+		}
 		
 	} catch (error) {
 		uploadFileRepo.update('FAILED', id)

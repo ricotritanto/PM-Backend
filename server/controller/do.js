@@ -7,6 +7,24 @@ const getAll = async(req, res, next) =>{
 		.catch(err => next(err))
 }
 
+const getTotal = async(req,res,next)=>{
+	return deliveryServices.getTotal(req.query)
+		.then(result => res.status(result.status).send(result))
+		.catch(err => next(err))
+}
+
+const getChart = async(req,res,next)=>{
+	return deliveryServices.getChart(req.query)
+		.then(result => res.status(result.status).send(result))
+		.catch(err => next(err))
+}
+
+const getChartCustomer = async(req,res,next)=>{
+	return deliveryServices.getChartCustomer(req.query)
+		.then(result => res.status(result.status).send(result))
+		.catch(err => next(err))
+}
+
 const deleteDO = async(req, res,next)=>{
 	return deliveryServices.deleteDO(req.params.id)
 		.then(result => res.status(result.status).send(result))
@@ -20,14 +38,17 @@ const updateDO = async(req,res,next) =>{
 }
 
 const createDO = async(req,res, next) =>{
-	return deliveryServices.create(req)
+	return deliveryServices.create(req,res)
 		.then(result => res.status(result.status).send(result))
 		.catch(err => next(err))
 }
 
 module.exports = {
 	getAll,
+	getTotal,
 	deleteDO,
 	updateDO,
-	createDO
+	createDO,
+	getChart,
+	getChartCustomer
 }

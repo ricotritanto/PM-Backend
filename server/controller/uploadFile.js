@@ -11,7 +11,7 @@ const uploadExcel = async (req, res) => {
 		})
 		uploadFileService.uploadData(req.body.result_file_name, req.body.file_type)
 		return res.status(200).send({
-			message: 'success'
+			message: 'success',
 		})	
 	} catch (error) {
 		return res.status(500).send({

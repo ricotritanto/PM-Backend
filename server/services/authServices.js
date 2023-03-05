@@ -82,9 +82,9 @@ const signin = async(req)=>{
 	}
 
 	var token = jwt.sign({id:user.id}, config.secret,{
-		expiresIn: 86400 //24 jam
+		expiresIn: 60 //24 jam
 	})
-
+	console.log(token)
 	try{
 		const getRoles = await authRepo.getRole(user)
 		return {

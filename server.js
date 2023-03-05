@@ -20,7 +20,6 @@ process.env.FULL_FILEPATH = __dirname + '/'+process.env.FILEPATH
 
 Routes(app)
 
-
 // const db = require('./server/models')
 // db.sequelize.sync({ force: true }).then(() => {
 // 	console.log('Drop and re-sync db.')

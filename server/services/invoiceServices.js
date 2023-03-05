@@ -21,7 +21,7 @@ const create = async(req)=>{
 	if(checkIsExistCode)
 		return {
 			status:400,
-			message: req.body.invoice_date+'is already'
+			message: 'customer with the invoice date '+req.body.invoice_date+ ' is already'
 		}
 	try {
 		await invoiceRepo.createInvoice(req)
@@ -81,18 +81,17 @@ const update = async(req)=>{
 	const delivery = await invoiceRepo.find(req)
 	if(!delivery) return{
 		status:400,
-		message: 'delivery orders not found'
+		message: 'invoice not found'
 	}
-	// if(req.body.do_date != undefined && req.body.do_date != delivery.delivery_order_date){
-	// 	const existingRecord = await invoiceRepo.findData(1, 10, {}, [{name: req.body.name}])
-	// 	// console.log(existingRecord.count)
-	// 	if (existingRecord.count) {
-	// 		return {
-	// 			status: 400,
-	// 			message: 'Product name already exist!'
-	// 		}
-	// 	}
-	// }
+	if(req.body.invoice_date == undefined || req.body.invoice_date == delivery.invoice_date){
+		const existingRecord = await invoiceRepo.findData(1, 10, {}, [{invoice_date: req.body.invoice_date}])
+		if (existingRecord.count) {
+			return {
+				status: 400,
+				message: 'invoice already exist!'
+			}
+		}
+	}
 	try {
 		req.body.updated_at = sequelize.fn('NOW')
 		await invoiceRepo.updateById(req)

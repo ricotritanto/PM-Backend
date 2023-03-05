@@ -25,20 +25,26 @@ fs
 		db[model.name] = model
 	})
 
+
+// jika ingin sync drop db, ini di offkan dlu
 Object.keys(db).forEach(modelName => {
 	if (db[modelName].associate) {
 		db[modelName].associate(db)
 	}
 })
+
+
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
+// jika ingin sync drop db, ini di offkan dlu
 var initModels = require('./init-models')
 var models = initModels(sequelize)
 
 
 
 // module.exports = db
-// module.exports = models
+// jika ingin sync drop db, ini di offkan dlu
+module.exports = models
 module.exports = {models, db}
 

@@ -3,6 +3,7 @@ const {models}= require('../models')
 const {Op } = require('sequelize')
 
 const insertBulk = async (data) => {	
+	console.log(data)
 	return	await models.invoice.bulkCreate(data)		
 }
 
@@ -12,6 +13,16 @@ const findByDate = async(req) =>{
 			{invoice_date:req.body.invoice_date},
 			{customer_id:req.body.customer_id}
 		),
+		deleted_at:null
+	})
+}
+
+const findID = async(invoice)=>{
+	return await models.invoice.findOne({
+		where:{
+			invoice_date:invoice.invoice_date,
+			customer_id:invoice.customer_id
+		},
 		deleted_at:null
 	})
 }
@@ -28,19 +39,37 @@ const createInvoice = async(req)=>{
 
 
 const getAllInvoice = async(data,limit =10, offset = 0)=>{
-	const { name } = data
-	var condition = name ? { name: { [Op.like]: `%${name}%` } } : null
+	let where= {}
+	let whereCust = {}
+	whereCust.deleted_at = null
+	where.deleted_at = null
+	if (data.customer !== undefined)
+		whereCust.name = {
+			[Op.like]: '%' + data.customer + '%'
+		}
+	if((data.invoice_date!==undefined && data.invoice_date2!==undefined)&&(data.invoice_date!=='' && data.invoice_date2!==''))
+	{
+		where.invoice_date = {
+			[Op.between]: [data.invoice_date, data.invoice_date2]
+		}
+	}
+
 	return await models.invoice.findAndCountAll({ 
-		where: condition,
+		distinct: true,
+		required: false,
 		limit:parseInt(limit),
 		offset: (offset <= 1) ? 0 : ((offset - 1) * parseFloat(limit)),
 		include:{
 			model: models.customers,
-			as:'customers'
+			as:'customers',
+			where: whereCust,
+			attributes: ['id','name']				
 		},
+		where,
 		order:[['invoice_date', 'DESC']]
 	})
 		.catch(ex => {
+			console.log(ex)
 			throw ex
 		})
 }
@@ -106,5 +135,6 @@ module.exports = {
 	deleteInvoice,
 	find,
 	findData,
-	updateById
+	updateById,
+	findID
 }

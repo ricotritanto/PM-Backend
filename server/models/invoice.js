@@ -26,9 +26,9 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: 0
 		},
 		invoice_date: {
-			type: DataTypes.DATE,
+			type: Sequelize.DATEONLY,
 			allowNull: false,
-			defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+			defaultValue: Sequelize.Sequelize.DATEONLY
 		},
 		created_at: {
 			type: DataTypes.DATE,

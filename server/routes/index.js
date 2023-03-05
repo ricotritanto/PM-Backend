@@ -8,6 +8,7 @@ const authController = require('../controller/auth')
 const userController = require('../controller/user')
 const doController = require('../controller/do')
 const invoiceController = require('../controller/invoice')
+const reportController = require('../controller/report')
 
 module.exports = app =>{
 	app.get('/api/health', (req, res) => {
@@ -66,6 +67,9 @@ module.exports = app =>{
 	app.get('/api/delivery_orders', doController.getAll)
 	app.delete('/api/delivery_orders/:id', doController.deleteDO)
 	app.put('/api/delivery_orders/:id', doController.updateDO)
+	app.get('/api/delivery_orders/total', doController.getTotal)
+	app.get('/api/delivery_orders/chart', doController.getChart)
+	app.get('/api/delivery_orders/chart/customer', doController.getChartCustomer)
 
 
 	// api delivery invoice
@@ -74,8 +78,8 @@ module.exports = app =>{
 	app.delete('/api/invoice/:id', invoiceController.deleteInvoice)
 	app.put('/api/invoice/:id', invoiceController.updateInvoice)
 
-
-
+	// api report
+	app.get('/api/report', reportController.getAll)
 
 	// test user controller
 	app.get('/api/test/all', userController.allAccess)

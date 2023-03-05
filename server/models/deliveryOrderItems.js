@@ -1,24 +1,42 @@
 const Sequelize = require('sequelize')
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('deliveryOrder', {
+	return sequelize.define('deliveryOrderItems', {
 		id: {
 			autoIncrement: true,
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true
 		},
-		customer_id: {
+		product_id: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			references: {
-				model: 'customers',
+				model: 'products',
 				key: 'id'
 			}
 		},
-		delivery_order_date: {
-			type: Sequelize.DATEONLY,
+		deliveryOrder_id: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			references: {
+				model: 'deliveryOrder',
+				key: 'id'
+			}
+		},
+		buying_price: {
+			type: DataTypes.BIGINT,
 			allowNull: false,
-			defaultValue: Sequelize.Sequelize.DATEONLY,
+			defaultValue: 0
+		},
+		selling_price: {
+			type: DataTypes.BIGINT,
+			allowNull: false,
+			defaultValue: 0
+		},
+		qty: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0
 		},
 		created_at: {
 			type: DataTypes.DATE,
@@ -36,7 +54,7 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	}, {
 		sequelize,
-		tableName: 'deliveryOrder',
+		tableName: 'deliveryOrderItems',
 		timestamps: false,
 		indexes: [
 			{
@@ -51,9 +69,16 @@ module.exports = function(sequelize, DataTypes) {
 				name: 'deliveryOrder_ibfk_1',
 				using: 'BTREE',
 				fields: [
-					{ name: 'customer_id' },
+					{ name: 'product_id' },
 				]
 			},
+			{
+				name: 'deliveryOrder_ibfk_2',
+				using: 'BTREE',
+				fields: [
+					{ name: 'deliveryOrder_id' },
+				]
+			}
 		]
 	})
 }
