@@ -36,53 +36,53 @@ module.exports = app =>{
 	app.post('/api/auth/signin', authController.signin)
 
 	// api uploads
-	app.post('/api/file/upload',fileUploader.uploadExcelFile, uploadFile.uploadExcel)
+	app.post('/api/file/upload',[authJwt.verifyToken],fileUploader.uploadExcelFile, uploadFile.uploadExcel)
 
 
 	// api products
-	app.get('/api/products', productController.getAll)
-	app.delete('/api/products/:id', productController.deleteProduct)
-	app.put('/api/products/:id', productController.updateProduct)
-	app.post('/api/products/', productController.createProduct)
+	app.get('/api/products', [authJwt.verifyToken],productController.getAll)
+	app.delete('/api/products/:id', [authJwt.verifyToken],productController.deleteProduct)
+	app.put('/api/products/:id', [authJwt.verifyToken],productController.updateProduct)
+	app.post('/api/products/', [authJwt.verifyToken],productController.createProduct)
 
 
 
 	// api customers
-	app.get('/api/customers', customerController.getAll)
-	app.delete('/api/customers/:id', customerController.deleteCustomer)
-	app.put('/api/customers/:id', customerController.updateCustomer)
-	app.post('/api/customers/', customerController.createCustomer)
+	app.get('/api/customers',[authJwt.verifyToken], customerController.getAll)
+	app.delete('/api/customers/:id', [authJwt.verifyToken],customerController.deleteCustomer)
+	app.put('/api/customers/:id', [authJwt.verifyToken],customerController.updateCustomer)
+	app.post('/api/customers/', [authJwt.verifyToken],customerController.createCustomer)
 	
 
 	// api user
-	app.get('/api/users', authController.getUser)
-	app.get('/api/roles', authController.getRole)
+	app.get('/api/users', [authJwt.verifyToken],authController.getUser)
+	app.get('/api/roles', [authJwt.verifyToken], authController.getRole)
 	// app.get('/api/users/:id', authController.getById)
-	app.put('/api/users/:id', authController.updateUser)
-	app.delete('/api/users/:id', authController.deleteUser)
-	app.put('/api/users/changepassword/:id', authController.changePassword)
+	app.put('/api/users/:id', [authJwt.verifyToken],authController.updateUser)
+	app.delete('/api/users/:id', [authJwt.verifyToken],authController.deleteUser)
+	app.put('/api/users/changepassword/:id', [authJwt.verifyToken],authController.changePassword)
 
 	// api delivery delivery_orders
-	app.post('/api/delivery_orders', doController.createDO)
-	app.get('/api/delivery_orders', doController.getAll)
-	app.delete('/api/delivery_orders/:id', doController.deleteDO)
-	app.put('/api/delivery_orders/:id', doController.updateDO)
-	app.get('/api/delivery_orders/total', doController.getTotal)
-	app.get('/api/delivery_orders/chart', doController.getChart)
-	app.get('/api/delivery_orders/chart/customer', doController.getChartCustomer)
+	app.post('/api/delivery_orders', [authJwt.verifyToken],doController.createDO)
+	app.get('/api/delivery_orders', [authJwt.verifyToken],doController.getAll)
+	app.delete('/api/delivery_orders/:id',[authJwt.verifyToken], doController.deleteDO)
+	app.put('/api/delivery_orders/:id', [authJwt.verifyToken], doController.updateDO)
+	app.get('/api/delivery_orders/total',[authJwt.verifyToken], doController.getTotal)
+	app.get('/api/delivery_orders/chart', [authJwt.verifyToken],doController.getChart)
+	app.get('/api/delivery_orders/chart/customer',[authJwt.verifyToken], doController.getChartCustomer)
 
 
 	// api delivery invoice
-	app.post('/api/invoice', invoiceController.createInvoice)
-	app.get('/api/invoice', invoiceController.getAll)
-	app.delete('/api/invoice/:id', invoiceController.deleteInvoice)
-	app.put('/api/invoice/:id', invoiceController.updateInvoice)
+	app.post('/api/invoice', [authJwt.verifyToken],invoiceController.createInvoice)
+	app.get('/api/invoice', [authJwt.verifyToken],invoiceController.getAll)
+	app.delete('/api/invoice/:id', [authJwt.verifyToken],invoiceController.deleteInvoice)
+	app.put('/api/invoice/:id', [authJwt.verifyToken],invoiceController.updateInvoice)
 
 	// api report
-	app.get('/api/report', reportController.getAll)
+	app.get('/api/report', [authJwt.verifyToken],reportController.getAll)
 
 	// test user controller
-	app.get('/api/test/all', userController.allAccess)
+	app.get('/api/test/all', [authJwt.verifyToken],userController.allAccess)
 
 	app.get(
 		'/api/test/user',
